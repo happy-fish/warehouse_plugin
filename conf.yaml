@@ -1,0 +1,11 @@
+alias_name: 电商库存系统插件
+author: Allen Woo
+author_uri: www.osroom.com/plugin
+plugin_uri: www.osroom.com/plugin
+introduce: 电商库存系统插件
+version: v0.1
+license: BSD-3
+hook_name: none
+startup_file_name: main.py
+execution_func_name: main
+
