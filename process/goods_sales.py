@@ -40,16 +40,17 @@ def update_quantity():
 
     if modify_op == "sell":
         quantity = int(value.get("quantity", 0))
-        property[key]['quantity'] -= quantity
-        property[key]['sales'] += quantity
-        mdb_web.dbs["plug_warehouse_goods_sales"].insert({
-            "user_id":current_user.str_id,
-            "goods_id":goods_id,
-            "size":property[key]['size'],
-            "color": property[key]['color'],
-            "sales":quantity,
-            "time":time.time()
-        })
+        if property[key]['quantity'] > quantity:
+            property[key]['quantity'] -= quantity
+            property[key]['sales'] += quantity
+            mdb_web.dbs["plug_warehouse_goods_sales"].insert({
+                "user_id":current_user.str_id,
+                "goods_id":goods_id,
+                "size":property[key]['size'],
+                "color": property[key]['color'],
+                "sales":quantity,
+                "time":time.time()
+            })
 
     elif modify_op == "add":
         quantity = int(value.get("quantity", 0))
