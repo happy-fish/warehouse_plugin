@@ -1,2 +1,3 @@
-## 基于osroom的商品库存系统模块插件，需要配合对应的osroom主题使用
+## 插件包放在本目录下即可(Plug-in package in this directory)
+
 
