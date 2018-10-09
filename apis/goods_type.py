@@ -4,7 +4,7 @@ from flask import request
 from apps.configs.sys_config import METHOD_WARNING
 from apps.core.blueprint import api
 from apps.core.flask.response import response_format
-from apps.plugins.inventory_sys_plugin.process.goods_type import get_goods_types, add_goods_types, update_goods_types, \
+from apps.plugins.warehouse_plugin.process.goods_type import get_goods_types, add_goods_types, update_goods_types, \
     del_goods_types
 
 __author__ = "Allen Woo"

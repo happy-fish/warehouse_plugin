@@ -18,7 +18,7 @@ def get_categorys():
     :return:
     '''
     goods_type_id = request.argget.all('goods_type_id')
-    categorys = mdb_web.dbs["plug_invsys_category"].find({"type_id":goods_type_id,
+    categorys = mdb_web.dbs["plug_warehouse_category"].find({"type_id":goods_type_id,
                                                           "user_id":current_user.str_id})
     categorys = objid_to_str(categorys)
     data = {"categorys":categorys, "msg_type": "s", "msg":gettext("Successful data acquisition"),
@@ -40,7 +40,7 @@ def add_goods_categorys():
         return r
 
     user_id = current_user.str_id
-    if mdb_web.dbs["plug_invsys_category"].find_one({"name":name, "type_id":goods_type_id,"user_id":user_id}):
+    if mdb_web.dbs["plug_warehouse_category"].find_one({"name":name, "type_id":goods_type_id,"user_id":user_id}):
         data = {"msg": gettext("Item category already exists"), "msg_type": "w", "http_status": 403}
     else:
         up_data = {
@@ -48,7 +48,7 @@ def add_goods_categorys():
             "type_id":goods_type_id,
             "user_id": user_id
         }
-        mdb_web.dbs["plug_invsys_category"].insert(up_data)
+        mdb_web.dbs["plug_warehouse_category"].insert(up_data)
         data = {"msg": gettext("Add item category successfully"), "msg_type": "s", "http_status": 201}
 
     return data
@@ -66,11 +66,11 @@ def update_goods_categorys():
     if not s:
         return r
     user_id = current_user.str_id
-    if mdb_web.dbs["plug_invsys_category"].find_one({"name":name, "user_id":user_id,"type_id":goods_type_id,
+    if mdb_web.dbs["plug_warehouse_category"].find_one({"name":name, "user_id":user_id,"type_id":goods_type_id,
                                                  "_id":{"$ne":ObjectId(id)}}):
         data = {"msg": gettext("Item category already exists"), "msg_type": "w", "http_status": 403}
     else:
-        mdb_web.dbs["plug_invsys_category"].update_one({"_id":ObjectId(id), "user_id":current_user.str_id},
+        mdb_web.dbs["plug_warehouse_category"].update_one({"_id":ObjectId(id), "user_id":current_user.str_id},
                                                    {"$set":{"name":name}})
         data = {"msg": gettext("Update item category successfully"), "msg_type": "s", "http_status": 201}
 
@@ -90,12 +90,12 @@ def del_goods_categorys():
     obj_ids = []
     faied_cnt = 0
     for id in ids:
-        if mdb_web.dbs["plug_invsys_goods"].find_one({"category_id":id, "user_id":user_id}):
+        if mdb_web.dbs["plug_warehouse_goods"].find_one({"category_id":id, "user_id":user_id}):
             faied_cnt += 1
             continue
         obj_ids.append(ObjectId(id))
 
-    r = mdb_web.dbs["plug_invsys_category"].delete_many({"_id": {"$in": obj_ids}, "user_id":user_id})
+    r = mdb_web.dbs["plug_warehouse_category"].delete_many({"_id": {"$in": obj_ids}, "user_id":user_id})
     if r.deleted_count:
         data = {"msg": gettext("Successfully deleted {} category").format(r.deleted_count), "msg_type": "s",
                 "http_status": 204}

@@ -1,7 +1,7 @@
 # -*-coding:utf-8-*-
 
 __author__ = "Allen Woo"
-PLUGIN_NAME = "inventory_sys_plugin"
+PLUGIN_NAME = "warehouse_plugin"
 
 CONFIG = {
 

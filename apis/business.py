@@ -4,7 +4,7 @@ from flask import request
 from apps.configs.sys_config import METHOD_WARNING
 from apps.core.blueprint import api
 from apps.core.flask.response import response_format
-from apps.plugins.inventory_sys_plugin.process.business import get_businesses, add_business, update_business, del_business
+from apps.plugins.warehouse_plugin.process.business import get_businesses, add_business, update_business, del_business
 
 __author__ = "Allen Woo"
 

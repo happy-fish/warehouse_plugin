@@ -1,10 +1,11 @@
 # -*-coding:utf-8-*-
-from apps.plugins.inventory_sys_plugin.process.goods import add_goods, update_goods, get_goods, update_property, \
-    update_cloth, get_more_goods
+from apps.plugins.warehouse_plugin.process.goods import add_goods, update_goods, get_goods, update_property, \
+    update_cloth, get_more_goods, del_goods
 from flask import request
 from apps.configs.sys_config import METHOD_WARNING
 from apps.core.blueprint import api
 from apps.core.flask.response import response_format
+from apps.plugins.warehouse_plugin.process.goods_sales import update_quantity
 
 __author__ = 'Allen Woo'
 @api.route('/plug/goods', methods=['GET','POST','PUT','DELETE'])
@@ -31,6 +32,21 @@ def api_plug_goods():
 
         else:
             data = update_goods()
+    elif request.c_method == "DELETE":
+        data = del_goods()
+    else:
+        data = {"msg_type":"w", "msg":METHOD_WARNING, "http_status":405}
+    return response_format(data)
+
+@api.route('/plug/goods/sales', methods=['GET','POST','PUT','DELETE'])
+def api_plug_goods_sales():
+
+    '''
+    GET:
+
+    '''
+    if request.c_method == "PUT":
+        data = update_quantity()
     else:
         data = {"msg_type":"w", "msg":METHOD_WARNING, "http_status":405}
     return response_format(data)
