@@ -3,12 +3,14 @@ from flask import request
 
 from apps.configs.sys_config import METHOD_WARNING
 from apps.core.blueprint import api
+from apps.core.flask.login_manager import osr_login_required
 from apps.core.flask.response import response_format
 from apps.plugins.warehouse_plugin.process.business import get_businesses, add_business, update_business, del_business
 
 __author__ = "Allen Woo"
 
 @api.route('/plug/goods/business', methods=['GET','POST','PUT','DELETE'])
+@osr_login_required
 def api_plug_business():
 
     '''

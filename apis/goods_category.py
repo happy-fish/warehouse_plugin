@@ -3,6 +3,7 @@ from flask import request
 
 from apps.configs.sys_config import METHOD_WARNING
 from apps.core.blueprint import api
+from apps.core.flask.login_manager import osr_login_required
 from apps.core.flask.response import response_format
 from apps.plugins.warehouse_plugin.process.goods_category import add_goods_categorys, update_goods_categorys, \
     del_goods_categorys, get_categorys
@@ -10,6 +11,7 @@ from apps.plugins.warehouse_plugin.process.goods_category import add_goods_categ
 __author__ = "Allen Woo"
 
 @api.route('/plug/goods/category', methods=['GET','POST','PUT','DELETE'])
+@osr_login_required
 def api_plug_goods_category():
 
     '''

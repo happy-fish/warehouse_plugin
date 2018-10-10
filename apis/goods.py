@@ -1,4 +1,5 @@
 # -*-coding:utf-8-*-
+from apps.core.flask.login_manager import osr_login_required
 from apps.plugins.warehouse_plugin.process.goods import add_goods, update_goods, get_goods, update_property, \
     update_cloth, get_more_goods, del_goods
 from flask import request
@@ -9,6 +10,7 @@ from apps.plugins.warehouse_plugin.process.goods_sales import update_quantity
 
 __author__ = 'Allen Woo'
 @api.route('/plug/goods', methods=['GET','POST','PUT','DELETE'])
+@osr_login_required
 def api_plug_goods():
 
     '''
@@ -39,6 +41,7 @@ def api_plug_goods():
     return response_format(data)
 
 @api.route('/plug/goods/sales', methods=['GET','POST','PUT','DELETE'])
+@osr_login_required
 def api_plug_goods_sales():
 
     '''
