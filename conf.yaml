@@ -1,7 +1,7 @@
 alias_name: 电商库存系统插件
 author: Allen Woo
-author_uri: www.osroom.com/plugin
-plugin_uri: www.osroom.com/plugin
+author_uri: https://github.com/osroom-plugins/warehouse_plugin
+plugin_uri: https://github.com/osroom-plugins/warehouse_plugin
 introduce: 电商库存系统插件
 version: v0.1
 license: BSD-3
