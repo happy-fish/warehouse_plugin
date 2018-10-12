@@ -4,6 +4,7 @@ from bson import ObjectId
 from flask import request
 from flask_babel import gettext
 from flask_login import current_user
+
 from apps.app import mdb_web
 from apps.core.flask.reqparse import arg_verify
 from apps.utils.format.obj_format import json_to_pyseq, str_to_num
@@ -279,6 +280,7 @@ def get_goods():
         colors = []
         cloths = []
         total = 0
+        shortcoming = 0
         total_sales = 0
         inventory_warning = 0
         property = goods["property"]
@@ -287,7 +289,10 @@ def get_goods():
                 sizes.append(v["size"])
             if v["color"]:
                 colors.append(v["color"])
-            total+=v["quantity"]
+            if v["quantity"] > 0:
+                total += v["quantity"]
+            elif v["quantity"] < 0:
+                shortcoming += -v["quantity"]
             total_sales+=v["sales"]
             if v["quantity"] < 10:
                 inventory_warning += 1
@@ -302,6 +307,8 @@ def get_goods():
         goods["total"] = total
         goods["total_sales"] = total_sales
         goods["inventory_warning"] = inventory_warning
+        goods["shortcoming"] = shortcoming
+
         data = {"goods":goods, "msg_type": "s", "http_status": 200}
     else:
         data = {"msg": gettext("No related data found"), "msg_type": "w", "http_status": 404}
@@ -317,7 +324,7 @@ def get_more_goods():
     category_id = request.argget.all('category_id')
     business_id = request.argget.all('business_id')
     keyword = request.argget.all('keyword')
-    sort = json_to_pyseq(request.argget.all('sort',[("time_to_market", -1)]))
+    sort = json_to_pyseq(request.argget.all('sort',[("update_time", -1)]))
     page = str_to_num(request.argget.all('page', 1))
     pre = str_to_num(request.argget.all('pre', 15))
 
@@ -343,6 +350,7 @@ def get_more_goods():
             colors = []
             cloths = []
             total = 0
+            shortcoming = 0
             total_sales = 0
             inventory_warning = 0
             property = gd["property"]
@@ -351,7 +359,10 @@ def get_more_goods():
                     sizes.append(v["size"])
                 if v["color"]:
                     colors.append(v["color"])
-                total += v["quantity"]
+                if v["quantity"]>0:
+                    total += v["quantity"]
+                elif v["quantity"]<0:
+                    shortcoming += -v["quantity"]
                 total_sales += v["sales"]
                 if v["quantity"] < 10:
                     inventory_warning += 1
@@ -368,6 +379,7 @@ def get_more_goods():
             gd["total_sales"] = total_sales
             gd["_id"] = str(gd["_id"])
             gd["inventory_warning"] = inventory_warning
+            gd["shortcoming"] = shortcoming
 
         data = {"goods":goods, "msg_type": "s", "http_status": 200}
     else:
