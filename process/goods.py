@@ -215,7 +215,7 @@ def update_property():
 
 
     mdb_web.dbs["plug_warehouse_goods"].update_one({"_id": ObjectId(goods_id)},
-                                                {"$set":{"property":property}})
+                                                {"$set":{"property":property, "update_time":time.time()}})
     data = {"msg": gettext("Update {} succeeded".format(property_name)), "msg_type": "s", "http_status": 201}
     return data
 
@@ -257,7 +257,6 @@ def update_cloth():
             data = {"msg": gettext("The proportion of ingredients is greater than 100%"), "msg_type": "w",
                     "http_status": 403}
             return data
-
     # 删除不需要的
     for k in cloth_names:
         del goods["cloth"][k]
@@ -282,7 +281,7 @@ def get_goods():
         cloths = []
         total = 0
         total_sales = 0
-
+        inventory_warning = 0
         property = goods["property"]
         for v in property.values():
             if v["size"]:
@@ -291,6 +290,8 @@ def get_goods():
                 colors.append(v["color"])
             total+=v["quantity"]
             total_sales+=v["sales"]
+            if v["quantity"] < 10:
+                inventory_warning += 1
         for k,v in goods['cloth'].items():
             cloths.append({"name":k, "per":v})
 
@@ -301,7 +302,7 @@ def get_goods():
         goods["cloths"] = cloths
         goods["total"] = total
         goods["total_sales"] = total_sales
-
+        goods["inventory_warning"] = inventory_warning
         data = {"goods":goods, "msg_type": "s", "http_status": 200}
     else:
         data = {"msg": gettext("No related data found"), "msg_type": "w", "http_status": 404}
@@ -344,6 +345,7 @@ def get_more_goods():
             cloths = []
             total = 0
             total_sales = 0
+            inventory_warning = 0
             property = gd["property"]
             for v in property.values():
                 if v["size"]:
@@ -352,6 +354,9 @@ def get_more_goods():
                     colors.append(v["color"])
                 total += v["quantity"]
                 total_sales += v["sales"]
+                if v["quantity"] < 10:
+                    inventory_warning += 1
+
             for k, v in gd['cloth'].items():
                 cloths.append({"name": k, "per": v})
 
@@ -363,6 +368,8 @@ def get_more_goods():
             gd["total"] = total
             gd["total_sales"] = total_sales
             gd["_id"] = str(gd["_id"])
+            gd["inventory_warning"] = inventory_warning
+
         data = {"goods":goods, "msg_type": "s", "http_status": 200}
     else:
         data = {"msg": gettext("No related data found"), "msg_type": "w", "http_status": 404}

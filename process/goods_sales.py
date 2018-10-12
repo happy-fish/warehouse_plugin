@@ -40,17 +40,16 @@ def update_quantity():
 
     if modify_op == "sell":
         quantity = int(value.get("quantity", 0))
-        if property[key]['quantity'] > quantity:
-            property[key]['quantity'] -= quantity
-            property[key]['sales'] += quantity
-            mdb_web.dbs["plug_warehouse_goods_sales"].insert({
-                "user_id":current_user.str_id,
-                "goods_id":goods_id,
-                "size":property[key]['size'],
-                "color": property[key]['color'],
-                "sales":quantity,
-                "time":time.time()
-            })
+        property[key]['quantity'] -= quantity
+        property[key]['sales'] += quantity
+        mdb_web.dbs["plug_warehouse_goods_sales"].insert({
+            "user_id":current_user.str_id,
+            "goods_id":goods_id,
+            "size":property[key]['size'],
+            "color": property[key]['color'],
+            "sales":quantity,
+            "time":time.time()
+        })
 
     elif modify_op == "add":
         quantity = int(value.get("quantity", 0))
@@ -68,6 +67,6 @@ def update_quantity():
 
 
     mdb_web.dbs["plug_warehouse_goods"].update_one({"_id": ObjectId(goods_id)},
-                                                {"$set":{"property":property}})
+                                                {"$set":{"property":property, "update_time":time.time()}})
     data = {"msg": gettext("Update succeeded"), "msg_type": "s", "http_status": 201}
     return data
