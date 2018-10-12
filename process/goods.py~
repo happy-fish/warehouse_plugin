@@ -4,6 +4,7 @@ from bson import ObjectId
 from flask import request
 from flask_babel import gettext
 from flask_login import current_user
+
 from apps.app import mdb_web
 from apps.core.flask.reqparse import arg_verify
 from apps.utils.format.obj_format import json_to_pyseq, str_to_num
